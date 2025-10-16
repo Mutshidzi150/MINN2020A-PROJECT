@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive -->
+    <title>{% block title %}African Critical Minerals App{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body class="{{ theme if theme else '' }}">
+    <div class="app">
+        <header class="app-header">
+            <div class="header-left">
+                <a class="brand" href="{{ url_for('dashboard') }}">African Critical Minerals</a>
+            </div>
+            <div class="header-right">
+                <!-- Theme toggle switch with inline SVG icons -->
+                <label class="theme-switch" title="Toggle theme" role="switch" aria-checked="false">
+                    <input type="checkbox" id="theme-switch" aria-label="Toggle dark mode">
+                    <span class="switch-slider" aria-hidden="true">
+                        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="#FFD54F"></circle></svg>
+                        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#FFF" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>
+                    </span>
+                </label>
+                <div id="theme-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+            </div>
+        </header>
+
+        {% block sidebar %}
+        <aside class="app-sidebar" aria-label="Primary">
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('mineral_database') }}">Mineral Database</a></li>
+                    <li><a href="{{ url_for('country_profiles') }}">Country Profiles</a></li>
+                    <li><a href="{{ url_for('interactive_charts') }}">Interactive Charts</a></li>
+                    <li><a href="{{ url_for('geographical_map') }}">Map</a></li>
+                    {% if 'user' in session %}
+                    <li><a href="{{ url_for('logout') }}">Logout ({{ session.user }})</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </aside>
+        {% endblock %}
+
+        <main class="app-main">
+            <div class="container">{% block content %}{% endblock %}</div>
+        </main>
+    </div>
+    <!-- Theme switcher script (moved to static) -->
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+</body>
+</html>
