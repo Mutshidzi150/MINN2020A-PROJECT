@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Mineral Database{% endblock %}
+{% block content %}
+<h2>Mineral Database (From Real Data + XLSX)</h2>
+<nav aria-label="Breadcrumb"><a href="{{ url_for('dashboard') }}">Dashboard</a> > Mineral Database</nav>
+{% if session.get('role') == 'Researcher' %}
+<a href="{{ url_for('download_minerals_pdf') }}" style="float:right; margin-bottom:10px;">Download as PDF (Researcher)</a>
+{% endif %}
+<form method="get" style="margin-bottom: 18px;">
+    <input type="text" name="search" placeholder="Search minerals..." value="{{ search_query or '' }}" style="padding: 7px; width: 250px; border-radius: 5px; border: 1px solid #ccc;">
+    <button type="submit">Search</button>
+</form>
+{% if message %}<p style="color: green; text-align: center;">{{ message }}</p>{% endif %}
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+{% for mineral, info in minerals.items() %}
+<div class="mineral-card">
+    <h3 class="mineral-title">{{ mineral.upper() }}</h3>
+    <div class="mineral-desc">
+        <div class="desc-content">{{ info.Description }}</div>
+        <button type="button" class="desc-toggle" aria-expanded="false">Read more</button>
+    </div>
+    <p class="mineral-price"><strong>Market Price (USD/tonne):</strong> {{ info.MarketPriceUSD_per_tonne }}</p>
+</div>
+{% endfor %}
+</div>
+
+<script src="{{ url_for('static', filename='minerals.js') }}"></script>
+{% if session['role'] == 'Researcher' or 'insights' in features %}
+<h3>Add Researcher Insight (Minerals)</h3>
+<form method="POST" style="margin-bottom: 20px;">
+    <textarea name="insight" rows="2" cols="60" placeholder="Add your insight here..." required></textarea><br>
+    <button type="submit">Submit Insight</button>
+</form>
+{% endif %}
+{% if insights %}
+<h4>Researcher Insights</h4>
+<ul>
+{% for i in insights %}
+    <li><strong>{{ i.user }}</strong>: {{ i.insight }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+<p style="margin-top:18px;"><a href="{{ url_for('dashboard') }}" class="btn-back">← Back to Dashboard</a></p>
+{% endblock %}
