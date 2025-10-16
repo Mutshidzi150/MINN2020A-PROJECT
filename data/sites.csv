@@ -1,0 +1,5 @@
+SiteID,SiteName,CountryID,MineralID,Latitude,Longitude,Production_tonnes
+1,Kolwezi Mine,1,1,-10.7167,25.4667,100000
+2,Bushveld Lithium,2,2,-25.5000,28.5000,120000
+3,Balama Graphite,3,3,-13.3333,38.7667,50000
+4,Kalahari Manganese,4,4,-22.5777,16.9232,200000
