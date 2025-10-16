@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Country Profiles{% endblock %}
+{% block content %}
+<h2>Country Profiles</h2>
+<nav aria-label="Breadcrumb"><a href="{{ url_for('dashboard') }}">Dashboard</a> > Country Profiles</nav>
+{% if session.get('role') == 'Researcher' %}
+<a href="{{ url_for('download_countries_pdf') }}" style="float:right; margin-bottom:10px;">Download as PDF (Researcher)</a>
+{% endif %}
+<form method="get" style="margin-bottom: 18px;">
+    <input type="text" name="search" placeholder="Search countries..." value="{{ search_query or '' }}" style="padding: 7px; width: 250px; border-radius: 5px; border: 1px solid #ccc;">
+    <button type="submit">Search</button>
+</form>
+{% if message %}<p style="color: green; text-align: center;">{{ message }}</p>{% endif %}
+{% for country, info in countries.items() %}
+<div role="article" aria-labelledby="country-{{ loop.index }}">
+    <h3 id="country-{{ loop.index }}">{{ country }}</h3>
+    <p>GDP: ${{ info.GDP_BillionUSD }}B | Mining Revenue: ${{ info.MiningRevenue_BillionUSD }}B</p>
+    <p>Key Projects: {{ info.KeyProjects }}</p>
+    <p>Risk Level: {{ info.get('RiskLevel', 'Medium') }} (Proxy for geopolitical stability)</p>
+</div>
+{% endfor %}
+
+{% if session['role'] == 'Researcher' or 'insights' in features %}
+<h3>Add Researcher Insight (Countries)</h3>
+<form method="POST" style="margin-bottom: 20px;">
+    <textarea name="insight" rows="2" cols="60" placeholder="Add your insight here..." required></textarea><br>
+    <button type="submit">Submit Insight</button>
+</form>
+{% endif %}
+{% if insights %}
+<h4>Researcher Insights</h4>
+<ul>
+{% for i in insights %}
+    <li><strong>{{ i.user }}</strong>: {{ i.insight }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+<p style="margin-top:18px;"><a href="{{ url_for('dashboard') }}" class="btn-back">← Back to Dashboard</a></p>
+{% endblock %}
