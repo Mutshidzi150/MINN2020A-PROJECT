@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<button onclick="window.history.back()" class="btn-back">← Back</button>
+
+<!-- Dashboard hero with background image (save the attached image as static/background.jpg) -->
+<section id="dashboard-hero" class="dashboard-hero" role="region" aria-label="Dashboard background">
+    <div class="dashboard-overlay">
+        <h2 class="welcome-heading">Welcome, {{ session.user }} ({{ role }})</h2>
+        <div class="stats-panel">
+            <div><strong>{{ num_countries }}</strong><span>Countries</span></div>
+            <div><strong>{{ num_minerals }}</strong><span>Minerals</span></div>
+            <div><strong>{{ num_sites }}</strong><span>Sites</span></div>
+        </div>
+
+    <h3 class="features-heading">Available Features:</h3>
+        <div class="feature-grid">
+            {% for feature in features %}
+                {% if feature == 'database' %}
+                <div class="feature-card db">
+                    <a href="{{ url_for('mineral_database') }}">📊<span>Mineral Database</span></a>
+                </div>
+                {% endif %}
+                {% if feature == 'profiles' %}
+                <div class="feature-card profiles">
+                    <a href="{{ url_for('country_profiles') }}">🌍<span>Country Profiles</span></a>
+                </div>
+                {% endif %}
+                {% if feature == 'charts' %}
+                <div class="feature-card charts">
+                    <a href="{{ url_for('interactive_charts') }}">📈<span>Interactive Charts</span></a>
+                </div>
+                {% endif %}
+                {% if feature == 'map' %}
+                <div class="feature-card map">
+                    <a href="{{ url_for('geographical_map') }}">🗺️<span>Geographical Map</span></a>
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% if is_admin %}
+            <div class="feature-card admin">
+                <a href="{{ url_for('admin') }}">🔧<span>Admin Panel</span></a>
+            </div>
+            {% endif %}
+        </div>
+
+        <p role="status" class="last-updated">Last updated: October 2025 (Real data from CSVs/XLSX)</p>
+    </div>
+</section>
+{% endblock %}
